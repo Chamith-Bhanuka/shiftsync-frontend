@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 const ToastContext = createContext(null);
 
@@ -21,8 +21,13 @@ export function ToastProvider({ children }) {
     }, 5000);
   }, []);
 
+  const value = useMemo(
+    () => ({ showToast, dismissToast, clearAllToasts }),
+    [showToast, dismissToast, clearAllToasts]
+  );
+
   return (
-    <ToastContext.Provider value={{ showToast, dismissToast, clearAllToasts }}>
+    <ToastContext.Provider value={value}>
       {children}
       <div className="fixed bottom-5 right-5 flex flex-col items-end gap-2.5 z-50 pointer-events-none max-w-sm w-full px-4 sm:px-0">
         {toasts.length > 2 && (

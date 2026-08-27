@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const apiClient = axios.create({ baseURL: BASE_URL });
 
@@ -65,7 +65,7 @@ export const getUnreadNotifications = (userId) =>
   apiClient.get(`/notifications/notifications/unread?userId=${userId}`).then((res) => res.data);
 
 export const markNotificationRead = (id) =>
-  apiClient.put(`/notifications/notifications/${id}/read`).then((res) => res.data);
+  apiClient.put(`/notifications/notifications/${id}/read`, {}).then((res) => res.data);
 
 // ================= Credential Service =================
 

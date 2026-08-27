@@ -41,47 +41,49 @@ export default function Layout({ children }) {
     : 'U';
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
-      {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+      {/* Top Corporate Navigation Bar */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-2xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Left: Brand & Primary Navigation */}
+            {/* Left: Brand & Navigation */}
             <div className="flex items-center gap-6 lg:gap-8">
               <Link to="/" className="flex items-center gap-2.5 group focus:outline-none">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-indigo-200 group-hover:scale-105 transition-transform">
-                  ⚡
+                <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center text-sm font-bold shadow-xs group-hover:bg-indigo-600 transition-colors">
+                  <i className="fa-solid fa-calendar-check"></i>
                 </div>
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <span className="font-bold text-lg tracking-tight text-slate-900">
                   Shift<span className="text-indigo-600">Sync</span>
                 </span>
               </Link>
 
               {/* Desktop Nav Links */}
-              <nav className="hidden md:flex items-center gap-1.5" aria-label="Main Navigation">
+              <nav className="hidden md:flex items-center gap-1" aria-label="Main Navigation">
                 <Link
                   to="/employee"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     isCurrent('/employee')
-                      ? 'bg-indigo-50 text-indigo-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                      ? 'bg-slate-100 text-slate-900 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
-                  My Shifts
+                  <i className="fa-solid fa-calendar-days text-xs text-slate-500"></i>
+                  <span>My Shifts</span>
                 </Link>
 
                 <Link
                   to="/notifications"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all relative inline-flex items-center gap-1.5 ${
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all relative ${
                     isCurrent('/notifications')
-                      ? 'bg-indigo-50 text-indigo-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                      ? 'bg-slate-100 text-slate-900 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
+                  <i className="fa-solid fa-bell text-xs text-slate-500"></i>
                   <span>Notifications</span>
                   {unreadCount > 0 && (
                     <span
-                      className={`inline-flex items-center justify-center bg-rose-500 text-white text-[11px] font-bold rounded-full min-w-[18px] h-[18px] px-1 shadow-sm transition-transform duration-300 ${
+                      className={`inline-flex items-center justify-center bg-rose-600 text-white text-[11px] font-bold rounded-full min-w-[18px] h-[18px] px-1 transition-transform duration-300 ${
                         badgeBounced ? 'scale-125 ring-2 ring-rose-300' : 'scale-100'
                       }`}
                     >
@@ -92,40 +94,40 @@ export default function Layout({ children }) {
 
                 <Link
                   to="/credentials"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     isCurrent('/credentials')
-                      ? 'bg-indigo-50 text-indigo-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                      ? 'bg-slate-100 text-slate-900 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
-                  My Documents
+                  <i className="fa-solid fa-file-lines text-xs text-slate-500"></i>
+                  <span>My Documents</span>
                 </Link>
 
-                {/* Manager Links Divider & Pills */}
+                {/* Manager Links */}
                 {user?.role === 'Manager' && (
-                  <div className="flex items-center gap-1.5 pl-3 ml-2 border-l border-slate-200">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 px-2 py-0.5 rounded mr-1">
-                      Manager
-                    </span>
+                  <div className="flex items-center gap-1 pl-3 ml-2 border-l border-slate-200">
                     <Link
                       to="/manager"
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                         isCurrent('/manager')
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100/70'
+                          ? 'bg-slate-900 text-white shadow-xs'
+                          : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      Manager Hub
+                      <i className="fa-solid fa-user-tie text-xs"></i>
+                      <span>Manager Hub</span>
                     </Link>
                     <Link
                       to="/manager/documents"
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                         isCurrent('/manager/documents')
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100/70'
+                          ? 'bg-slate-900 text-white shadow-xs'
+                          : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                       }`}
                     >
-                      Document Reviews
+                      <i className="fa-solid fa-clipboard-check text-xs"></i>
+                      <span>Document Reviews</span>
                     </Link>
                   </div>
                 )}
@@ -133,40 +135,41 @@ export default function Layout({ children }) {
             </div>
 
             {/* Right: User Profile & WebSocket Status */}
-            <div className="hidden sm:flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-3">
               {user && (
-                <div className="flex items-center gap-3 pl-3 pr-2 py-1.5 bg-slate-100/80 rounded-full border border-slate-200/70">
+                <div className="flex items-center gap-2.5 pl-3 pr-2.5 py-1 bg-slate-100/90 rounded-lg border border-slate-200">
                   {/* Connection indicator */}
                   <div
                     className="flex items-center gap-1.5 text-xs font-medium text-slate-600"
-                    title={connected ? 'Real-time WebSocket Live' : 'Connecting / Reconnecting to WebSocket'}
-                    aria-label={`Real-time status: ${connected ? 'Live' : 'Reconnecting'}`}
+                    title={connected ? 'Real-time WebSocket Live' : 'Reconnecting to live notifications'}
                   >
-                    <span className="relative flex h-2.5 w-2.5">
+                    <span className="relative flex h-2 w-2">
                       {connected ? (
                         <>
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
                         </>
                       ) : (
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-400"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
                       )}
                     </span>
                     <span className="text-[11px] text-slate-500 hidden lg:inline">
-                      {connected ? 'Live Sync' : 'Reconnecting…'}
+                      {connected ? 'Live' : 'Connecting'}
                     </span>
                   </div>
 
-                  <div className="h-4 w-px bg-slate-200" />
+                  <div className="h-3.5 w-px bg-slate-300" />
 
                   {/* User Profile */}
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                    <div className="w-5 h-5 rounded-md bg-slate-800 text-white flex items-center justify-center text-[10px] font-bold">
                       {initials}
                     </div>
                     <div className="text-xs">
                       <span className="font-semibold text-slate-800">{user.name}</span>
-                      <span className="ml-1 text-slate-500 font-normal">({user.role})</span>
+                      <span className="ml-1 text-slate-500 font-normal text-[11px]">
+                        ({user.role === 'Manager' ? 'Manager' : 'Staff'})
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -174,9 +177,10 @@ export default function Layout({ children }) {
 
               <button
                 onClick={handleSwitchUser}
-                className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-200 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors cursor-pointer"
               >
-                Switch user
+                <i className="fa-solid fa-arrow-right-from-bracket text-[10px]"></i>
+                <span>Switch User</span>
               </button>
             </div>
 
@@ -184,8 +188,8 @@ export default function Layout({ children }) {
             <div className="flex sm:hidden items-center gap-2">
               {user && (
                 <span
-                  className={`inline-block w-2.5 h-2.5 rounded-full ${connected ? 'bg-emerald-500 ring-2 ring-emerald-200' : 'bg-rose-400'}`}
-                  title={connected ? 'Live' : 'Reconnecting…'}
+                  className={`inline-block w-2 h-2 rounded-full ${connected ? 'bg-emerald-600' : 'bg-rose-500'}`}
+                  title={connected ? 'Live' : 'Reconnecting'}
                 />
               )}
               <button
@@ -193,13 +197,7 @@ export default function Layout({ children }) {
                 className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none"
                 aria-label="Toggle menu"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {mobileMenuOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
+                <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-lg`}></i>
               </button>
             </div>
           </div>
@@ -211,7 +209,7 @@ export default function Layout({ children }) {
             {user && (
               <div className="flex items-center justify-between py-2 border-b border-slate-100 mb-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+                  <div className="w-7 h-7 rounded-md bg-slate-900 text-white flex items-center justify-center text-xs font-bold">
                     {initials}
                   </div>
                   <div>
@@ -220,8 +218,8 @@ export default function Layout({ children }) {
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                  <span className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-500' : 'bg-rose-400'}`} />
-                  {connected ? 'Live' : 'Reconnecting'}
+                  <span className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-600' : 'bg-rose-500'}`} />
+                  <span>{connected ? 'Live' : 'Offline'}</span>
                 </div>
               </div>
             )}
@@ -230,22 +228,26 @@ export default function Layout({ children }) {
               <Link
                 to="/employee"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-lg text-sm font-medium ${
-                  isCurrent('/employee') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-50'
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium ${
+                  isCurrent('/employee') ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                My Shifts
+                <i className="fa-solid fa-calendar-days text-slate-500 w-4"></i>
+                <span>My Shifts</span>
               </Link>
               <Link
                 to="/notifications"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium ${
-                  isCurrent('/notifications') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-50'
+                  isCurrent('/notifications') ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                <span>Notifications</span>
+                <div className="flex items-center gap-2">
+                  <i className="fa-solid fa-bell text-slate-500 w-4"></i>
+                  <span>Notifications</span>
+                </div>
                 {unreadCount > 0 && (
-                  <span className="bg-rose-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
+                  <span className="bg-rose-600 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
@@ -253,37 +255,40 @@ export default function Layout({ children }) {
               <Link
                 to="/credentials"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-lg text-sm font-medium ${
-                  isCurrent('/credentials') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700 hover:bg-slate-50'
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium ${
+                  isCurrent('/credentials') ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                My Documents
+                <i className="fa-solid fa-file-lines text-slate-500 w-4"></i>
+                <span>My Documents</span>
               </Link>
 
               {user?.role === 'Manager' && (
                 <>
                   <div className="pt-2 border-t border-slate-100">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 px-3">
-                      Manager Tools
+                      Management
                     </span>
                   </div>
                   <Link
                     to="/manager"
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-lg text-sm font-medium ${
-                      isCurrent('/manager') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-50'
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium ${
+                      isCurrent('/manager') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-50'
                     }`}
                   >
-                    Manager Hub
+                    <i className="fa-solid fa-user-tie w-4"></i>
+                    <span>Manager Hub</span>
                   </Link>
                   <Link
                     to="/manager/documents"
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-lg text-sm font-medium ${
-                      isCurrent('/manager/documents') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-50'
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium ${
+                      isCurrent('/manager/documents') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-50'
                     }`}
                   >
-                    Document Reviews
+                    <i className="fa-solid fa-clipboard-check w-4"></i>
+                    <span>Document Reviews</span>
                   </Link>
                 </>
               )}
@@ -295,21 +300,22 @@ export default function Layout({ children }) {
                   setMobileMenuOpen(false);
                   handleSwitchUser();
                 }}
-                className="w-full text-center py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg"
+                className="w-full inline-flex items-center justify-center gap-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200"
               >
-                Switch user
+                <i className="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                <span>Switch User</span>
               </button>
             </div>
           </div>
         )}
       </header>
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">{children}</main>
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</main>
 
-      {/* Modern subtle footer */}
-      <footer className="border-t border-slate-200/80 bg-white py-4 text-center text-xs text-slate-600">
-        ShiftSync · Real-time Roster & Shift Exchange System
+      {/* Corporate Footer */}
+      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
+        ShiftSync · Enterprise Shift Scheduling & Compliance Management
       </footer>
     </div>
   );

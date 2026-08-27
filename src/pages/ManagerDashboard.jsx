@@ -68,7 +68,7 @@ export default function ManagerDashboard() {
     loadSwapRequests();
   }, [user]);
 
-  // Group shifts by date for optimal scannability
+  // Group shifts by date for clean corporate table view
   const groupedShifts = useMemo(() => {
     if (!shifts) return {};
     const groups = {};
@@ -90,39 +90,39 @@ export default function ManagerDashboard() {
   async function handleCreateShift(e) {
     e.preventDefault();
     if (!newShift.startTime || !newShift.endTime) {
-      showToast('Start and end time are required.', 'error');
+      showToast('Start and end times are required.', 'error');
       return;
     }
     try {
       const payload = { locationId: 1, startTime: newShift.startTime, endTime: newShift.endTime };
       if (newShift.employeeId) payload.employeeId = newShift.employeeId;
       await createShift(payload);
-      showToast('Shift added.', 'success');
+      showToast('Shift added to schedule.', 'success');
       setNewShift({ employeeId: '', startTime: '', endTime: '' });
       loadShifts();
     } catch (err) {
-      showToast("Couldn't create the shift. Check the times and try again.", 'error');
+      showToast("Couldn't create the shift. Please check timestamps.", 'error');
     }
   }
 
   async function handleApprove(id) {
     try {
       await approveSwapRequest(id);
-      showToast('Swap approved.', 'success');
+      showToast('Swap request approved.', 'success');
       setSwapRequests((prev) => prev.filter((r) => r.id !== id));
       loadShifts();
     } catch (err) {
-      showToast("Couldn't approve this swap.", 'error');
+      showToast("Couldn't approve swap request.", 'error');
     }
   }
 
   async function handleReject(id) {
     try {
       await rejectSwapRequest(id);
-      showToast('Swap rejected.', 'info');
+      showToast('Swap request rejected.', 'info');
       setSwapRequests((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
-      showToast("Couldn't reject this swap.", 'error');
+      showToast("Couldn't reject swap request.", 'error');
     }
   }
 
@@ -131,37 +131,40 @@ export default function ManagerDashboard() {
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="page-title">Manager Command Hub</h1>
-            <span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-indigo-200">
-              Admin Access
+          <div className="flex items-center gap-2.5">
+            <h1 className="page-title">
+              <i className="fa-solid fa-user-tie text-slate-800 text-2xl"></i>
+              <span>Manager Command Hub</span>
+            </h1>
+            <span className="bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-0.5 rounded border border-slate-200 inline-flex items-center gap-1">
+              <i className="fa-solid fa-shield-halved text-[10px]"></i>
+              <span>Admin Access</span>
             </span>
           </div>
           <p className="text-sm text-slate-500">
-            Oversee team schedule, dispatch open shifts, and authorize swap requests.
+            Oversee team schedules, dispatch shifts, and review colleague swap requests.
           </p>
         </div>
         <button
           onClick={() => { loadShifts(); loadSwapRequests(); }}
-          className="btn-secondary text-xs self-start sm:self-auto flex items-center gap-1.5"
+          className="btn-secondary text-xs self-start sm:self-auto"
         >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          Refresh Board
+          <i className="fa-solid fa-arrows-rotate text-[11px]"></i>
+          <span>Refresh Board</span>
         </button>
       </div>
 
       {/* SECTION 1: Swap Requests Awaiting Decision */}
-      <div className="mb-10">
+      <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-slate-800 tracking-tight m-0">
-              Swap Requests Awaiting Decision
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 m-0 flex items-center gap-2">
+              <i className="fa-solid fa-arrow-right-arrow-left text-indigo-600 text-xs"></i>
+              <span>Swap Requests Awaiting Approval</span>
             </h2>
             {swapRequests && swapRequests.length > 0 && (
-              <span className="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-200">
-                {swapRequests.length} Pending Approval
+              <span className="bg-amber-50 text-amber-800 text-xs font-bold px-2 py-0.5 rounded border border-amber-200">
+                {swapRequests.length} Pending
               </span>
             )}
           </div>
@@ -169,21 +172,22 @@ export default function ManagerDashboard() {
 
         {swapRequests === null && !swapRequestsError && (
           <div className="card text-center py-6 text-slate-500 text-sm">
-            <div className="inline-block w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+            <div className="inline-block w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin mr-2"></div>
             Loading pending swap requests…
           </div>
         )}
 
         {swapRequestsError && (
           <div className="card border-rose-200 bg-rose-50/70 p-4 text-center">
-            <p className="text-sm font-semibold text-rose-800">Couldn't load swap requests.</p>
+            <p className="text-sm font-semibold text-rose-800">Unable to load swap requests.</p>
             <button className="btn-secondary text-xs mt-2" onClick={loadSwapRequests}>Retry</button>
           </div>
         )}
 
         {swapRequests && swapRequests.length === 0 && (
-          <div className="card bg-slate-50/70 border-dashed text-center py-6 text-slate-500 text-sm">
-            ✨ No swap requests require manager approval at this time.
+          <div className="card bg-slate-50/70 border-dashed text-center py-5 text-slate-500 text-xs flex items-center justify-center gap-2">
+            <i className="fa-regular fa-circle-check text-slate-400"></i>
+            <span>No pending swap requests requiring manager decision.</span>
           </div>
         )}
 
@@ -192,22 +196,22 @@ export default function ManagerDashboard() {
             {swapRequests.map((req) => (
               <div
                 key={req.id}
-                className="card border-indigo-200/90 bg-white p-5 shadow-sm hover:border-indigo-300 transition-all"
+                className="card border-slate-200 bg-white p-5 shadow-2xs hover:border-slate-300"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm shrink-0">
-                      ⇄
+                    <div className="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center text-xs shrink-0">
+                      <i className="fa-solid fa-arrow-right-arrow-left"></i>
                     </div>
                     <div>
-                      <div className="font-bold text-slate-900 text-base">
+                      <div className="font-bold text-slate-900 text-sm sm:text-base">
                         {formatRange(req.shiftStartTime, req.shiftEndTime)}
                       </div>
                       <div className="text-xs text-slate-600 flex items-center gap-1.5 mt-0.5">
-                        <span className="font-semibold text-indigo-700">{req.requestingEmployeeName}</span>
-                        <span>→</span>
+                        <span className="font-semibold text-slate-900">{req.requestingEmployeeName}</span>
+                        <i className="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
                         <span className="font-semibold text-slate-700">
-                          {req.targetEmployeeName || '(Open shift pool)'}
+                          {req.targetEmployeeName || '(Open Pool)'}
                         </span>
                       </div>
                     </div>
@@ -215,29 +219,31 @@ export default function ManagerDashboard() {
                   <span className={badgeClass(req.status)}>{req.status}</span>
                 </div>
 
-                {/* Focal Point: Employee response highlight */}
-                <div className="my-3.5">
+                {/* Employee response note */}
+                <div className="my-3">
                   {req.employeeResponse ? (
-                    <div className="bg-indigo-50/70 border-l-4 border-indigo-500 rounded-r-lg p-3.5 text-sm shadow-xs">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-900 mb-1">
-                        <span>💬</span>
-                        <span>{req.targetEmployeeName}'s response comment:</span>
+                    <div className="bg-slate-50 border-l-3 border-indigo-600 rounded-r-lg p-3 text-xs">
+                      <div className="flex items-center gap-1.5 font-semibold text-slate-800 mb-0.5">
+                        <i className="fa-regular fa-comment-dots text-slate-500"></i>
+                        <span>{req.targetEmployeeName}'s response note:</span>
                       </div>
-                      <p className="text-slate-800 font-medium italic">"{req.employeeResponse}"</p>
+                      <p className="text-slate-700 italic">"{req.employeeResponse}"</p>
                     </div>
                   ) : (
-                    <div className="bg-amber-50/70 border-l-4 border-amber-400 rounded-r-lg p-3 text-xs text-amber-800">
-                      <em>{req.targetEmployeeName || 'Coworker'} has not left a comment yet — you may still authorize or reject this swap.</em>
+                    <div className="bg-slate-50 border-l-3 border-amber-400 rounded-r-lg p-2.5 text-xs text-slate-600">
+                      <em>{req.targetEmployeeName || 'Coworker'} has not left an additional comment.</em>
                     </div>
                   )}
                 </div>
 
                 <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-                  <button className="btn-success text-xs sm:text-sm px-4" onClick={() => handleApprove(req.id)}>
-                    ✓ Approve Swap
+                  <button className="btn-success text-xs py-1.5 px-3.5" onClick={() => handleApprove(req.id)}>
+                    <i className="fa-solid fa-check text-[11px]"></i>
+                    <span>Approve Swap</span>
                   </button>
-                  <button className="btn-danger text-xs sm:text-sm px-4" onClick={() => handleReject(req.id)}>
-                    ✕ Reject
+                  <button className="btn-danger text-xs py-1.5 px-3.5" onClick={() => handleReject(req.id)}>
+                    <i className="fa-solid fa-xmark text-[11px]"></i>
+                    <span>Reject</span>
                   </button>
                 </div>
               </div>
@@ -246,13 +252,16 @@ export default function ManagerDashboard() {
         )}
       </div>
 
-      {/* SECTION 2: Add a Shift */}
-      <div className="mb-10">
-        <h2 className="section-title">Add / Schedule a Shift</h2>
+      {/* SECTION 2: Add / Schedule Shift */}
+      <div className="mb-8">
+        <h2 className="section-title">
+          <i className="fa-solid fa-calendar-plus text-slate-600 text-base"></i>
+          <span>Schedule New Shift</span>
+        </h2>
         <form onSubmit={handleCreateShift} className="card p-5">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="field-label">Assigned Employee</label>
+              <label className="field-label">Assigned Staff</label>
               <select
                 className="field mb-0"
                 value={newShift.employeeId}
@@ -291,49 +300,54 @@ export default function ManagerDashboard() {
           </div>
 
           <div className="flex justify-end mt-4 pt-3 border-t border-slate-100">
-            <button type="submit" className="btn text-xs sm:text-sm px-5">
-              + Publish Shift to Board
+            <button type="submit" className="btn text-xs py-2 px-4">
+              <i className="fa-solid fa-plus text-[11px]"></i>
+              <span>Publish Shift to Board</span>
             </button>
           </div>
         </form>
       </div>
 
-      {/* SECTION 3: Shift Board (Grouped by Day) */}
+      {/* SECTION 3: Master Shift Board */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="section-title m-0">Master Shift Board</h2>
-          {shifts && <span className="text-xs text-slate-500">{shifts.length} total shifts scheduled</span>}
+          <h2 className="section-title m-0">
+            <i className="fa-solid fa-table-list text-slate-600 text-base"></i>
+            <span>Master Shift Board</span>
+          </h2>
+          {shifts && <span className="text-xs text-slate-500 font-medium">{shifts.length} total shifts scheduled</span>}
         </div>
 
         {shifts === null && !shiftsError && (
           <div className="card text-center py-10 text-slate-500 text-sm">
-            <div className="inline-block w-5 h-5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mb-2"></div>
+            <div className="inline-block w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin mb-2"></div>
             <p>Loading master shift roster…</p>
           </div>
         )}
 
         {shiftsError && (
           <div className="card border-rose-200 bg-rose-50/70 p-4 text-center">
-            <p className="text-sm font-semibold text-rose-800">Couldn't load the shift board.</p>
+            <p className="text-sm font-semibold text-rose-800">Unable to load shift board.</p>
             <button className="btn-secondary text-xs mt-2" onClick={loadShifts}>Retry</button>
           </div>
         )}
 
         {shifts && shifts.length === 0 && (
-          <div className="card border-dashed text-center py-8 text-slate-500 text-sm">
-            No shifts scheduled yet. Use the form above to add your first shift.
+          <div className="card border-dashed text-center py-8 text-slate-500 text-xs">
+            No shifts scheduled yet. Use the form above to add a shift.
           </div>
         )}
 
         {shifts && shifts.length > 0 && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {Object.entries(groupedShifts).map(([dateLabel, dayShifts]) => (
-              <div key={dateLabel} className="card p-0 overflow-hidden border border-slate-200/90 shadow-xs">
-                <div className="bg-slate-100/90 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
-                  <span className="font-bold text-xs sm:text-sm text-slate-800 flex items-center gap-1.5">
-                    <span>📅</span> {dateLabel}
+              <div key={dateLabel} className="card p-0 overflow-hidden border border-slate-200 shadow-2xs">
+                <div className="bg-slate-100/90 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                  <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                    <i className="fa-regular fa-calendar text-slate-500"></i>
+                    <span>{dateLabel}</span>
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-600 bg-white px-2 py-0.5 rounded-full border border-slate-200">
+                  <span className="text-[11px] font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
                     {dayShifts.length} {dayShifts.length === 1 ? 'shift' : 'shifts'}
                   </span>
                 </div>
@@ -344,24 +358,26 @@ export default function ManagerDashboard() {
                     return (
                       <div
                         key={shift.id}
-                        className="px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-slate-50/60 transition-colors"
+                        className="px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/60 transition-colors"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5">
+                          <i className="fa-regular fa-clock text-slate-400 text-xs"></i>
                           <span className="font-medium text-slate-900 text-xs sm:text-sm">
                             {formatRange(shift.startTime, shift.endTime)}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-3 justify-between sm:justify-end">
+                        <div className="flex items-center gap-2.5 justify-between sm:justify-end">
                           <div className="flex items-center gap-1.5">
                             {isOpen ? (
-                              <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
-                                📢 OPEN SHIFT
+                              <span className="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded inline-flex items-center gap-1">
+                                <i className="fa-solid fa-bullhorn text-[10px]"></i>
+                                <span>OPEN SHIFT</span>
                               </span>
                             ) : (
-                              <div className="flex items-center gap-1 text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
-                                <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                {shift.employeeName}
+                              <div className="flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded">
+                                <i className="fa-solid fa-user text-[10px] text-slate-400"></i>
+                                <span>{shift.employeeName}</span>
                               </div>
                             )}
                           </div>
