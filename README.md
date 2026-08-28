@@ -8,6 +8,13 @@
 
 ---
 
+## Live Deployment & Access URL
+
+- **Production Cloud Run URL**: [https://shiftsync-frontend-571322630475.asia-southeast1.run.app/](https://shiftsync-frontend-571322630475.asia-southeast1.run.app/)
+- **Regional Load Balancer (HTTP)**: `http://34.1.204.172:80`
+
+---
+
 ## Description
 
 Modern corporate React frontend for ShiftSync — an enterprise shift roster and workforce management system. Built with React 18, Vite, and Tailwind CSS. Features real-time WebSocket/STOMP push notifications, FontAwesome vector icon system, role-based workflows for staff and managers, document verification management, and seamless integration with the ShiftSync microservices platform.
